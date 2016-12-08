@@ -110,7 +110,7 @@ top = [t[0] for t in degree_sorted[:args.top]]
 
 data = []
 for year in range(args.start_year, args.thru_year + 1):
-    row = [np.log10(t.mentions_in_year.get(year, 1))*10 for t in top]
+    row = [t.mentions_in_year.get(year, 0) for t in top]
     data.append(row)
 
 index = pd.date_range(start=str(args.start_year),
