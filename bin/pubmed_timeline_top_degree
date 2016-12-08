@@ -1,5 +1,5 @@
-from timeline import Term
-from timeline import Citation
+from pubmed_timeline import Term
+from pubmed_timeline import Citation
 from Bio import Medline
 import networkx as nx
 import itertools
