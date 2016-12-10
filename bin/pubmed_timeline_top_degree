@@ -116,6 +116,6 @@ index = pd.date_range(start=str(args.start_year),
 df = pd.DataFrame(data, index=index, columns=[t.term for t in top])
 
 df.to_csv(args.output,
-          sep=',',
+          sep=';',
           encoding='utf-8',
           index_label='year')
