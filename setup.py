@@ -17,7 +17,9 @@ setup(name='pubmed_timeline',
                         'networkx',
                         'biopython',],
       include_package_data=True,
-      scripts=['bin/pubmed_timeline_top_degree'],
+      scripts=['bin/pubmed_timeline_top_degree',
+               'bin/pubmed_graph_for_year.py',
+               'bin/plot_nx_graph.py'],
       zip_safe=False
       #TODO: include tests in setup with pytest
       )
