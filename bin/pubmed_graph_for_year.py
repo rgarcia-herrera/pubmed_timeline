@@ -57,7 +57,6 @@ else:
 records = Medline.parse(args.medline)
 
 G = nx.Graph()
-all_terms = dict()
 
 for r in records:
     c = Citation(r)
@@ -76,31 +75,32 @@ for r in records:
     elif args.mode == 'kw+flatmh':
         local_terms = c.get_keywords(groups=group_terms) + c.get_meshterms(flatten=True, groups=group_terms)
 
-
-        
-    for term in local_terms:
-        if term in all_terms:
-            if c.date.year in all_terms[term].mentions_in_year:
-                all_terms[term].mentions_in_year[c.date.year] += 1
-            else:
-                all_terms[term].mentions_in_year[c.date.year] = 1
-        else:
-            all_terms[term] = Term(term)
-            all_terms[term].mentions_in_year[c.date.year] = 1
-
     for pair in itertools.combinations(local_terms, 2):
-        n0 = all_terms[pair[0]]
-        n1 = all_terms[pair[1]]
-        w = G.get_edge_data(n0, n1, default={'w':1})
-        G.add_edge(n0, n1, w)
+
+        n0 = pair[0]
+        n1 = pair[1]
+        if n0 in G:
+            w = G.node[n0]['w'] + 1
+            G.add_node(n0, w=w)
+        else:
+            G.add_node(n0, w=1)
+
+        if n1 in G:
+            w = G.node[n1]['w'] + 1
+            G.add_node(n1, w=w)
+        else:
+            G.add_node(n1, w=1)
+            
+        w = G.get_edge_data(n0, n1, default={'w':0})['w'] + 1
+        G.add_edge(n0, n1, {'w': w})
 
 
 # remove uninteresting terms
 if args.ignore:
     for t in args.ignore.readlines():
         term = t.strip()
-        if term in all_terms:
-            G.remove_node(all_terms[term])
+        if term in G:
+            G.remove_node(term)
 
 degree_sorted = sorted(G.degree(weight='w').items(), key=operator.itemgetter(1))
 
