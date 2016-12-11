@@ -105,7 +105,7 @@ degree_sorted = sorted(G.degree(weight='w').items(), key=operator.itemgetter(1))
 
 degree_sorted.reverse()
 
-if top == 0:
+if args.top == 0:
     top = [t[0] for t in degree_sorted]
 else:
     top = [t[0] for t in degree_sorted[:args.top]]
