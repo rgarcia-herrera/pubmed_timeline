@@ -9,7 +9,10 @@ parser.add_argument('--pickle',
                     type=argparse.FileType('r'),
                     required=True,
                     help="path to pickled nx graph")
-parser.add_argument('--svg',
+parser.add_argument('--format',
+                    default='svg',
+                    help="svg or png")
+parser.add_argument('--out',
                     type=argparse.FileType('w'),
                     required=True,
                     help="path to output svg")
@@ -21,13 +24,9 @@ g = pickle.load(args.pickle)
 #pos=nx.spring_layout(g)
 
 nx.draw_circular(g, with_labels=True,
-                 node_size=[n.get_weight() for n in g.nodes()],
+                 node_size=[g.node[n]['w'] for n in g.nodes()],
                  node_color='lightgrey',
                  edge_color='lightgrey',
-                 alpha=0.6,
-                 labels={n:n.term for n in g.nodes()})
+                 alpha=0.6)
 
-
-
-
-plt.savefig(args.svg, format='svg')
+plt.savefig(args.out, format=args.format)
