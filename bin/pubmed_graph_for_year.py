@@ -40,7 +40,7 @@ parser.add_argument('--ignore',
                     help="file with list of terms to remove from network")
 parser.add_argument('--top',
                      type=int,
-                     default=40,
+                     default=0,
                      help="how many top terms")
 parser.add_argument('--pickle',
                     type=argparse.FileType('w'),
@@ -105,7 +105,10 @@ degree_sorted = sorted(G.degree(weight='w').items(), key=operator.itemgetter(1))
 
 degree_sorted.reverse()
 
-top = [t[0] for t in degree_sorted[:args.top]]
+if top == 0:
+    top = [t[0] for t in degree_sorted]
+else:
+    top = [t[0] for t in degree_sorted[:args.top]]
 
 delete = set(G.nodes()) - set(top)
 
