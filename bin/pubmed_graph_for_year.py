@@ -76,6 +76,7 @@ for r in records:
     elif args.mode == 'kw+flatmh':
         local_terms = c.get_keywords(groups=group_terms) + c.get_meshterms(flatten=True, groups=group_terms)
 
+
         
     for term in local_terms:
         if term in all_terms:
