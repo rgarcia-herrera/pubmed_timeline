@@ -1,6 +1,8 @@
 import argparse
 import pickle
 import networkx as nx
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 
@@ -9,6 +11,10 @@ parser.add_argument('--pickle',
                     type=argparse.FileType('r'),
                     required=True,
                     help="path to pickled nx graph")
+parser.add_argument('--pos',
+                    type=argparse.FileType('r'),
+                    required=True,
+                    help="path to pickled pos dictionary")
 parser.add_argument('--format',
                     default='svg',
                     help="svg or png")
@@ -21,12 +27,17 @@ args = parser.parse_args()
 
 g = pickle.load(args.pickle)
 
-#pos=nx.spring_layout(g)
+if args.pos:
+    pos=pickle.load(args.pos)
+else:
+    pos=nx.spring_layout(g)
 
-nx.draw_circular(g, with_labels=True,
-                 node_size=[g.node[n]['w'] for n in g.nodes()],
-                 node_color='lightgrey',
-                 edge_color='lightgrey',
-                 alpha=0.6)
+nx.draw(g,
+        with_labels=False,
+        pos=pos,
+        node_size=[g.node[n]['w'] for n in g.nodes()],
+        node_color='lightgrey',
+        edge_color='lightgrey',
+        alpha=0.6)
 
 plt.savefig(args.out, format=args.format)
