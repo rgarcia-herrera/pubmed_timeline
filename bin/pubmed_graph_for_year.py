@@ -75,22 +75,17 @@ for r in records:
     elif args.mode == 'kw+flatmh':
         local_terms = c.get_keywords(groups=group_terms) + c.get_meshterms(flatten=True, groups=group_terms)
 
+    for term in local_terms:
+        if term in G:
+            w = G.node[term]['w'] + 1
+            G.add_node(term, w=w)
+        else:
+            G.add_node(term, w=1)
+        
     for pair in itertools.combinations(local_terms, 2):
-
         n0 = pair[0]
         n1 = pair[1]
-        if n0 in G:
-            w = G.node[n0]['w'] + 1
-            G.add_node(n0, w=w)
-        else:
-            G.add_node(n0, w=1)
-
-        if n1 in G:
-            w = G.node[n1]['w'] + 1
-            G.add_node(n1, w=w)
-        else:
-            G.add_node(n1, w=1)
-            
+        
         w = G.get_edge_data(n0, n1, default={'w':0})['w'] + 1
         G.add_edge(n0, n1, {'w': w})
 
