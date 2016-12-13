@@ -78,9 +78,13 @@ for r in records:
     for term in local_terms:
         if term in G:
             w = G.node[term]['w'] + 1
-            G.add_node(term, w=w)
+            years = G.node[term]['years']
+            years[c.date.year] += 1
+            G.add_node(term, w=w, years=years)
         else:
-            G.add_node(term, w=1)
+            years = {y:0 for y in range(args.start_year, args.thru_year+1)}
+            years[c.date.year] += 1
+            G.add_node(term, w=1, years=years)
         
     for pair in itertools.combinations(local_terms, 2):
         n0 = pair[0]
