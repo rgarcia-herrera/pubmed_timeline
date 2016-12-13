@@ -58,7 +58,7 @@ class Citation:
         
         mesh_terms = list()
         for term in mh:
-            term = term.replace('*', '')
+            term = term.replace('*', '').lower()
             
             if flatten:
                 words = term.split('/')
@@ -87,10 +87,11 @@ class Citation:
                 int(w[1])
             except ValueError:
                 # only keep them if they fail
+                word = w[1].lower()
                 if groups:
-                    kw.append(groups.get(w[1], w[1]))
+                    kw.append(groups.get(word, word))
                 else:
-                    kw.append(w[1]) 
+                    kw.append(word) 
 
         return kw
 
